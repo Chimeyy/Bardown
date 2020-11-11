@@ -6,6 +6,7 @@ Bardown is a project, which lets you export decklists from sites like tappedout.
 This app uses the scryfall.com API to search and extract card information. It allows the decklist to be formatted in three diffetent ways.
 
 Features:
+
 -Multiple decklist formats available. You can import multiple copies of the same card by either writing multiple lines with the name of the desired card. Writing the desired amount of the given card followed by a space. Or the amount of the desired card followed by an "x" and then by space.
 
 -Double faced cards such as https://scryfall.com/card/ori/106/liliana-heretical-healer-liliana-defiant-necromancer Will come with two copies. One being double faces and the other with the default MtG backside to avoid being spotted as the given card.
