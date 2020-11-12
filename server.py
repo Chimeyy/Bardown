@@ -2,11 +2,11 @@ from flask import Flask, request, render_template, send_file, Response
 import re
 import json
 import requests
-import os
 
 def findCard(s):
     name = s
     url = "https://api.scryfall.com/cards/search?q="
+
     
     #check if "  Flip" in s
     if name.endswith("  Flip\r"):
@@ -95,30 +95,27 @@ def createDeck(f):
         
         k=1 #amount of a card
         
-        #check the amount
+        #check the amount of a card. It can either be "3x [card name]" or "3 [card name]" The two (or four) regexes are for lines with "3x" and for "3" respectivly
         x_test = re.search("^(\d+)+(x )", line)
-        d_test = re.search("\d+ +", line)
+        d_test = re.search("\d+ +", line) # check the amount of the cards
         
         x_test_k = re.search("^(\d+)", line)
-        d_test_k = re.search("\d+", line)
+        d_test_k = re.search("\d+", line) # check the amount of the cards
         
         
         if d_test:
             k = int(d_test_k.group(0))
-            print(k)
             s=line.split(d_test.group(0))
-            print(s)
             line = s[1]
-            print("line ohne x: " + s[1])
-        
-        if x_test:
+            print(k + "times the card: " + s[1])
+        else if x_test:
             k = int(x_test_k.group(0))
-            print(k)
             s=line.split(x_test.group(0))
-            print(s)
             line = s[1]
-            print("line mit x: " + s[1])
+            print(k + "times the card:" + s[1])
         
+        else:
+                print("one: "+line)
                 
             
 
@@ -166,38 +163,20 @@ def createDeck(f):
     if twoBoards:
         data['ObjectStates'].append(DoubleFaces)
     
-    #deck = json.loads(data)
-    #deck['ObjectStates'][0].append(data)
     
     return data
 
-
-
-
-
-
-
-
-
-
-
+#Calculate the decklist and send a response containing the deck in json
 @app.route('/', methods=['POST'])
 def my_form_post():
+    
+    
     deckName = request.form['text']
     deckContent = request.form['deckcontent']
     
-    print(deckName)
+    #print(deckName) Uncomment this part to output the requested deck's name in the console
     
     s = parse(deckContent)
     decklist = json.dumps(createDeck(s))
     
-    #f = open("decks/"+deckName+".json", "w")
-    #f.write(decklist)
-    #f.close()
-    
-    
-    
-    
-    
-    
-    return Response(decklist, mimetype="application/json", headers={"Content-disposition":"attachment","filename":deckName+".json"})
+    return Response(decklist, mimetype="application/json", headers={"Content-disposition":"attachment, filename="+deckName+".json"})
