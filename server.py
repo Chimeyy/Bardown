@@ -107,20 +107,14 @@ def createDeck(f):
             k = int(d_test_k.group(0))
             s=line.split(d_test.group(0))
             line = s[1]
-            print(k + "times the card: " + s[1])
-        else if x_test:
+            print(str(k) + " times the card: " + s[1])
+        elif x_test:
             k = int(x_test_k.group(0))
             s=line.split(x_test.group(0))
             line = s[1]
-            print(k + "times the card:" + s[1])
-        
+            print(str(k) + " times the card:" + s[1])
         else:
-                print("one: "+line)
-                
-            
-
-                
-        
+            print("one: " + line)
         
         card = findCard(line)
         while k>0:
@@ -169,8 +163,6 @@ def createDeck(f):
 #Calculate the decklist and send a response containing the deck in json
 @app.route('/', methods=['POST'])
 def my_form_post():
-    
-    
     deckName = request.form['text']
     deckContent = request.form['deckcontent']
     
@@ -179,4 +171,4 @@ def my_form_post():
     s = parse(deckContent)
     decklist = json.dumps(createDeck(s))
     
-    return Response(decklist, mimetype="application/json", headers={"Content-disposition":"attachment, filename="+deckName+".json"})
+    return Response(decklist, mimetype="application/json", headers={"Content-disposition":"attachment; filename="+deckName+".json"})
